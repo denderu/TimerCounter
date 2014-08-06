@@ -2,12 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-//#include <QTimer>
+#include "settingswindow.h"
 
 namespace Ui {
 class MainWindow;
 }
 
+class SettingsWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -18,6 +19,7 @@ public:
  
 private:
     Ui::MainWindow *ui;
+    SettingsWindow *settings;
     QTimer *timer;
     int counter;
     int current;
@@ -27,6 +29,8 @@ private slots:
 	
     void on_startButton_clicked();
     void on_stopButton_clicked();
+
+    //friend void SettingsWindow::saveSettings();
 };
 
 #endif // MAINWINDOW_H

@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "settingswindow.h"
+#include "ui_settingswindow.h"
 
 #include <QTimer>
 
@@ -8,21 +10,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    settings = new SettingsWindow();
     QTimer *timer = new QTimer();
     current = 1;
     counter = 60;
     timer->setInterval(1000);
+
     connect(ui->startButton,SIGNAL(clicked()),timer,SLOT(start()));
     connect(ui->pauseButton,SIGNAL(clicked()),timer,SLOT(stop()));
     connect(ui->stopButton,SIGNAL(clicked()),timer,SLOT(stop()));
     connect(timer,SIGNAL(timeout()),this,SLOT(tick()));
+    connect(ui->actionConfigure, SIGNAL(triggered()), settings, SLOT(show()));
 }
 
 MainWindow::~MainWindow()
 {
     disconnect(this,SLOT(tick()));
     delete ui;
-    delete timer;
+    //delete timer;
+    delete settings;
 }
 
 void MainWindow::tick()
