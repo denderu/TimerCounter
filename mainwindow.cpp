@@ -8,18 +8,35 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QTimer *timer = new QTimer(this);
-
-    timer->setInterval(5000);
-    QObject::connect(timer,SIGNAL(timeout()), this, SLOT(close()));
-    //QAbstractButton::connect(ui->startButton,SIGNAL(clicked()), timer, SLOT(start(1000)));
-    QObject::connect(ui->startButton,SIGNAL(clicked()), timer, SLOT(start()));
-
+    QTimer *timer = new QTimer();
+    current = 1;
+    counter = 60;
+    timer->setInterval(1000);
+    connect(ui->startButton,SIGNAL(clicked()),timer,SLOT(start()));
+    connect(ui->pauseButton,SIGNAL(clicked()),timer,SLOT(stop()));
+    connect(ui->stopButton,SIGNAL(clicked()),timer,SLOT(stop()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(tick()));
 }
 
 MainWindow::~MainWindow()
 {
+    disconnect(this,SLOT(tick()));
     delete ui;
+    delete timer;
+}
+
+void MainWindow::tick()
+{
+    if(current<counter)
+	{
+        if (current>9)
+		{	
+            ui->label->setText("00:"+QString::number(current));
+        }
+		else ui->label->setText("00:0"+QString::number(current));
+
+		current++;
+	}
 }
 
 void MainWindow::on_startButton_clicked()
@@ -31,8 +48,6 @@ void MainWindow::on_startButton_clicked()
     ui->startButton->setEnabled(true);
     ui->pauseButton->setEnabled(true);
     ui->stopButton->setEnabled(true);
-
-    ui->label->setText(QString::number(timer->remainingTime()));
 }
 
 void MainWindow::on_stopButton_clicked()
@@ -45,5 +60,6 @@ void MainWindow::on_stopButton_clicked()
     ui->pauseButton->setEnabled(false);
     ui->stopButton->setEnabled(false);
 
+    current=1;
     ui->label->setText("00:00");
 }
