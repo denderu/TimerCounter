@@ -26,11 +26,11 @@ private:
  
 private slots:
     void tick();
+    void receiveSettings(int, bool);
 	
     void on_startButton_clicked();
     void on_stopButton_clicked();
 
-    //friend void SettingsWindow::saveSettings();
 };
 
 #endif // MAINWINDOW_H

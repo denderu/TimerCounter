@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->stopButton,SIGNAL(clicked()),timer,SLOT(stop()));
     connect(timer,SIGNAL(timeout()),this,SLOT(tick()));
     connect(ui->actionConfigure, SIGNAL(triggered()), settings, SLOT(show()));
+    connect(settings,SIGNAL(sendSettings(int, bool)),this,SLOT(receiveSettings(int, bool)));
 }
 
 MainWindow::~MainWindow()
@@ -43,6 +44,16 @@ void MainWindow::tick()
 
 		current++;
 	}
+}
+
+void MainWindow::receiveSettings(int sec, bool check)
+{
+    counter = sec;
+    if(check == true)
+    {
+        current = sec;
+        counter = 0;
+    }
 }
 
 void MainWindow::on_startButton_clicked()

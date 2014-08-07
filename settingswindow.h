@@ -21,6 +21,8 @@ private:
 
 public slots:
     void saveSettings();
+signals:
+    void sendSettings(int, bool);
 
 };
 
