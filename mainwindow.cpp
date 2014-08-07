@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     settings = new SettingsWindow();
     QTimer *timer = new QTimer();
-    current = 1;
+    current = 0;
     counter = 60;
     timer->setInterval(1000);
 
@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer,SIGNAL(timeout()),this,SLOT(tick()));
     connect(ui->actionConfigure, SIGNAL(triggered()), settings, SLOT(show()));
     connect(settings,SIGNAL(sendSettings(int, bool)),this,SLOT(receiveSettings(int, bool)));
+    connect(settings,SIGNAL(sendSettings(int,bool)),timer,SLOT(stop()));
 }
 
 MainWindow::~MainWindow()
@@ -34,25 +35,35 @@ MainWindow::~MainWindow()
 
 void MainWindow::tick()
 {
-    if(current<counter)
-	{
-        if (current>9)
-		{	
-            ui->label->setText("00:"+QString::number(current));
-        }
-		else ui->label->setText("00:0"+QString::number(current));
+    if (current>9)
+    {
+        ui->label->setText("00:"+QString::number(current));
+    }
+    else ui->label->setText("00:0"+QString::number(current));
 
-		current++;
-	}
+    if(counter == 0)
+    {
+        if(current>counter)
+            current--;
+    }
+
+    else
+    {
+        if(current<counter)
+            current++;
+    }
 }
 
 void MainWindow::receiveSettings(int sec, bool check)
 {
     counter = sec;
+    current = 0;
+    ui->label->setText("00:00");
     if(check == true)
     {
         current = sec;
         counter = 0;
+        ui->label->setText("00:"+QString::number(current));
     }
 }
 

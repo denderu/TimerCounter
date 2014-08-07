@@ -30,11 +30,9 @@ void SettingsWindow::saveSettings()
         case 5: seconds=60; break;
         default: break;
     }
-    //qDebug()<<seconds;
-    //counter = seconds;
-     bool checkReverse = ui->checkBox->isChecked();
+    bool checkReverse = ui->checkBox->isChecked();
 
-     emit sendSettings(seconds,checkReverse);
-     hide();
+    emit sendSettings(seconds,checkReverse);
+    hide();
 }
 

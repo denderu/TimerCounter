@@ -22,6 +22,7 @@ private:
     SettingsWindow *settings;
     QTimer *timer;
     int counter;
+    int reverseCounter;
     int current;
  
 private slots:
